@@ -36,7 +36,7 @@ public class DataKaryawan extends javax.swing.JFrame {
         }  
         catch (SQLException | HeadlessException e) {
         }
-        }
+     }
 
     /**
      * This method is called from within the constructor to initialize the form.
