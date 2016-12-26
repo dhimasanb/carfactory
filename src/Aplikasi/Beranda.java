@@ -4,6 +4,8 @@
  */
 package aplikasi;
 
+import java.awt.Toolkit;
+
 /**
  *
  * @author Administrator
@@ -129,8 +131,8 @@ public class Beranda extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        Aplikasi.DataKaryawan obpetgas = new Aplikasi.DataKaryawan();
-        obpetgas.show();
+        Aplikasi.DataKaryawan dhimasganteng = new Aplikasi.DataKaryawan();
+        dhimasganteng.show();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -143,6 +145,8 @@ public class Beranda extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+        Aplikasi.DataMobil dhimasganteng = new Aplikasi.DataMobil();
+        dhimasganteng.show();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
