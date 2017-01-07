@@ -30,7 +30,8 @@ public class Koneksi {
             JOptionPane.showMessageDialog(null,"koneksi berhasil","report koneksi",JOptionPane.INFORMATION_MESSAGE);
         }
         catch (SQLException ex){
-            System.err.println("Koneksi GAGAL");
+            JOptionPane.showMessageDialog(null,"koneksi gagal","report koneksi",JOptionPane.INFORMATION_MESSAGE);
+//            System.err.println("Koneksi GAGAL");
 //            JOptionPane.showMessageDialog(null,"<Error> Koneksikan Xampp Terlebih Dahulu : "+ex,"Koneksi Gagal",JOptionPane.WARNING_MESSAGE);
 
         }
