@@ -4,12 +4,27 @@
  */
 package Aplikasi.Admin;
 
+import Database.Koneksi;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
+import java.io.File;
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -18,6 +33,12 @@ import net.proteanit.sql.DbUtils;
 public class Karyawan extends javax.swing.JFrame {
     
     public boolean databaru;
+
+    Koneksi koneksi = new Koneksi();
+    JasperReport jasperReport;
+    JasperDesign jasperDesign;
+    JasperPrint jasperPrint;
+    Map<String, Object> param = new HashMap<String, Object>();
 
     /**
      * Creates new form FrmMenuUtama
@@ -37,7 +58,7 @@ public class Karyawan extends javax.swing.JFrame {
         catch (SQLException | HeadlessException e) {
         }
      }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -52,6 +73,7 @@ public class Karyawan extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
+        btnCetak = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
@@ -73,7 +95,7 @@ public class Karyawan extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
-        jProgressBar1 = new javax.swing.JProgressBar();
+        jPanel3 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
@@ -99,15 +121,22 @@ public class Karyawan extends javax.swing.JFrame {
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Data Karyawan");
 
+        btnCetak.setText("Cetak");
+        btnCetak.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCetakActionPerformed(evt);
+            }
+        });
+
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "ID", "Nama", "Merk", "Harga"
+
             }
         ));
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -123,19 +152,24 @@ public class Karyawan extends javax.swing.JFrame {
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel9)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCetak, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel9)
-                .addGap(18, 18, 18)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel9)
+                    .addComponent(btnCetak))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(54, Short.MAX_VALUE))
+                .addContainerGap(110, Short.MAX_VALUE))
         );
 
         jPanel1.setBackground(new java.awt.Color(34, 66, 138));
@@ -315,6 +349,17 @@ public class Karyawan extends javax.swing.JFrame {
                 .addContainerGap(272, Short.MAX_VALUE))
         );
 
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 470, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 6, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -326,25 +371,23 @@ public class Karyawan extends javax.swing.JFrame {
                 .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(176, 176, 176))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(23, 23, 23)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel15)
                 .addGap(31, 31, 31))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -374,7 +417,7 @@ public class Karyawan extends javax.swing.JFrame {
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(11, 11, 11)
                 .addComponent(jLabel7)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -528,6 +571,21 @@ public class Karyawan extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField5ActionPerformed
 
+    private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakActionPerformed
+        // TODO add your handling code here:
+        try {
+            File file = new File("src/Laporan/Karyawan.jrxml");
+            jasperDesign = JRXmlLoader.load(file);
+            param.clear();
+            jasperReport = JasperCompileManager.compileReport(jasperDesign);
+            jasperPrint = JasperFillManager.fillReport(jasperReport, param, Database.Koneksi.getConnection());
+            JasperViewer.viewReport(jasperPrint, false);        
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+    }//GEN-LAST:event_btnCetakActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -597,6 +655,7 @@ public class Karyawan extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Kembali;
     private javax.swing.JButton btnBaru;
+    private javax.swing.JButton btnCetak;
     private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnSimpan;
     private javax.swing.JLabel jLabel1;
@@ -612,11 +671,11 @@ public class Karyawan extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel9;
-    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
