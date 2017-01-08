@@ -181,7 +181,7 @@ public class FormLogin extends javax.swing.JFrame {
                 }
             } else {
                 // its for if login filed
-                JOptionPane.showMessageDialog(null," Maaf coba lagi ! !");
+                JOptionPane.showMessageDialog(null," Username/Password Salah");
             }
         } catch (HeadlessException | SQLException e) {
         
