@@ -358,21 +358,21 @@ public class Beranda extends javax.swing.JFrame {
     private void PabrikMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PabrikMouseClicked
         // TODO add your handling code here:
         this.dispose();
-        Aplikasi.Admin.Pabrik dhimasganteng = new Aplikasi.Admin.Pabrik();
+        Aplikasi.User.Mobil dhimasganteng = new Aplikasi.User.Mobil();
         dhimasganteng.show();
     }//GEN-LAST:event_PabrikMouseClicked
 
     private void SparepartsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SparepartsMouseClicked
         // TODO add your handling code here:
         this.dispose();
-        Aplikasi.Admin.Sparepart dhimasganteng = new Aplikasi.Admin.Sparepart();
+        Aplikasi.User.Sparepart dhimasganteng = new Aplikasi.User.Sparepart();
         dhimasganteng.show();
     }//GEN-LAST:event_SparepartsMouseClicked
 
     private void TentangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TentangMouseClicked
         // TODO add your handling code here:
         this.dispose();
-        Aplikasi.Admin.Tentang dhimasganteng = new Aplikasi.Admin.Tentang();
+        Aplikasi.User.Tentang dhimasganteng = new Aplikasi.User.Tentang();
         dhimasganteng.show();
     }//GEN-LAST:event_TentangMouseClicked
 
