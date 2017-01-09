@@ -211,6 +211,7 @@ public class Karyawan extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Jabatan");
 
+        txtId.setEditable(false);
         txtId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtIdActionPerformed(evt);
@@ -599,7 +600,7 @@ public class Karyawan extends javax.swing.JFrame {
     private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakActionPerformed
         // TODO add your handling code here:
         try {
-            File file = new File("src/Laporan/Karyawan.jrxml");
+            File file = new File("src/Laporan/Admin/Karyawan.jrxml");
             jasperDesign = JRXmlLoader.load(file);
             param.clear();
             jasperReport = JasperCompileManager.compileReport(jasperDesign);
