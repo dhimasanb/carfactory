@@ -384,7 +384,7 @@ public class Beranda extends javax.swing.JFrame {
           // ga melakukan apa2
         } else if (response == JOptionPane.YES_OPTION) {
           this.dispose();
-          Aplikasi.Admin.FormLogin dhimasganteng = new Aplikasi.Admin.FormLogin();
+          Aplikasi.Admin.FormMasuk dhimasganteng = new Aplikasi.Admin.FormMasuk();
           dhimasganteng.show();        
         } else if (response == JOptionPane.CLOSED_OPTION) {
             // ga melakukan apa2
