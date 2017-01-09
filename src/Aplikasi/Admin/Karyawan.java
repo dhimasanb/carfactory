@@ -10,6 +10,7 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -34,6 +35,9 @@ public class Karyawan extends javax.swing.JFrame {
     
     public boolean databaru;
 
+    private static Connection config; //Koneksi
+    private DefaultTableModel model; //Model Tabel
+
     Koneksi koneksi = new Koneksi();
     JasperReport jasperReport;
     JasperDesign jasperDesign;
@@ -45,19 +49,35 @@ public class Karyawan extends javax.swing.JFrame {
      */
     public Karyawan() {
         initComponents();
-        GetData();
+        
+        //buat model tabel / header tabel
+        model=new DefaultTableModel();
+        this.TableKaryawan.setModel(model); 
+        model.addColumn("ID");
+        model.addColumn("NIK");
+        model.addColumn("Nama");
+        model.addColumn("Jabatan");
+        model.addColumn("No. Telp");
+        model.addColumn("Alamat");
+
+        ambil_data_tabel();
     }
     
-    private void GetData(){ // menampilkan data dari database
-       try {
-        Connection conn =(Connection)Database.Koneksi.getConnection();
-        java.sql.Statement stm = conn.createStatement();
-        java.sql.ResultSet sql = stm.executeQuery("select * from karyawan");
-        jTable1.setModel(DbUtils.resultSetToTableModel(sql));
-        }  
-        catch (SQLException | HeadlessException e) {
+    private static Connection buka_koneksi() {
+        if (config==null) {
+            try {
+                String url="jdbc:mysql://localhost:3306/pabrikmobil"; //nama database belajar
+                String user="root"; //user mysql
+                String password="root"; //password mysql
+               
+                DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+                config=DriverManager.getConnection(url,user,password);
+            }catch (SQLException t) {
+                System.out.println("Error membuat koneksi");
+            }
         }
-     }
+     return config;
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -75,23 +95,24 @@ public class Karyawan extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         btnCetak = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        TableKaryawan = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        txtIdKaryawan = new javax.swing.JTextField();
-        txtNamaKaryawan = new javax.swing.JTextField();
+        txtId = new javax.swing.JTextField();
+        txtNama = new javax.swing.JTextField();
         txtNik = new javax.swing.JTextField();
         txtJabatan = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         btnHapus = new javax.swing.JButton();
-        btnBaru = new javax.swing.JButton();
+        btnTambah = new javax.swing.JButton();
         btnSimpan = new javax.swing.JButton();
+        btnSegarkan = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
-        txtNoHp = new javax.swing.JTextField();
+        txtNoTelp = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtAlamat = new javax.swing.JTextArea();
@@ -128,7 +149,7 @@ public class Karyawan extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        TableKaryawan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
                 {},
@@ -139,12 +160,12 @@ public class Karyawan extends javax.swing.JFrame {
 
             }
         ));
-        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+        TableKaryawan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable1MouseClicked(evt);
+                TableKaryawanMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(TableKaryawan);
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -190,15 +211,15 @@ public class Karyawan extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Jabatan");
 
-        txtIdKaryawan.addActionListener(new java.awt.event.ActionListener() {
+        txtId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtIdKaryawanActionPerformed(evt);
+                txtIdActionPerformed(evt);
             }
         });
 
-        txtNamaKaryawan.addActionListener(new java.awt.event.ActionListener() {
+        txtNama.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNamaKaryawanActionPerformed(evt);
+                txtNamaActionPerformed(evt);
             }
         });
 
@@ -227,10 +248,10 @@ public class Karyawan extends javax.swing.JFrame {
             }
         });
 
-        btnBaru.setText("Baru");
-        btnBaru.addActionListener(new java.awt.event.ActionListener() {
+        btnTambah.setText("Tambah");
+        btnTambah.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBaruActionPerformed(evt);
+                btnTambahActionPerformed(evt);
             }
         });
 
@@ -241,35 +262,48 @@ public class Karyawan extends javax.swing.JFrame {
             }
         });
 
+        btnSegarkan.setText("Segarkan");
+        btnSegarkan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSegarkanActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(0, 20, Short.MAX_VALUE)
-                .addComponent(btnBaru, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnSegarkan, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(0, 17, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnHapus)
                     .addComponent(btnSimpan)
-                    .addComponent(btnBaru)))
+                    .addComponent(btnTambah))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSegarkan)
+                .addContainerGap())
         );
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setText("No. HP");
+        jLabel8.setText("No. Telp");
 
-        txtNoHp.addActionListener(new java.awt.event.ActionListener() {
+        txtNoTelp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNoHpActionPerformed(evt);
+                txtNoTelpActionPerformed(evt);
             }
         });
 
@@ -301,11 +335,11 @@ public class Karyawan extends javax.swing.JFrame {
                             .addComponent(jLabel10))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtNamaKaryawan)
+                            .addComponent(txtNama)
                             .addComponent(txtJabatan)
                             .addComponent(txtNik, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
-                            .addComponent(txtNoHp)
-                            .addComponent(txtIdKaryawan, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+                            .addComponent(txtNoTelp)
+                            .addComponent(txtId, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
                             .addComponent(jScrollPane2)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -330,15 +364,15 @@ public class Karyawan extends javax.swing.JFrame {
                         .addGap(11, 11, 11)
                         .addComponent(jLabel8))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(txtIdKaryawan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtNamaKaryawan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtNik, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtJabatan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtNoHp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtNoTelp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(11, 11, 11)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel10)
@@ -471,104 +505,96 @@ public class Karyawan extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNikActionPerformed
 
-    private void txtNamaKaryawanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNamaKaryawanActionPerformed
+    private void txtNamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNamaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNamaKaryawanActionPerformed
+    }//GEN-LAST:event_txtNamaActionPerformed
 
-    private void txtIdKaryawanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdKaryawanActionPerformed
+    private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtIdKaryawanActionPerformed
+    }//GEN-LAST:event_txtIdActionPerformed
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         // TODO add your handling code here:
-        if (databaru == true) { // prosess simpan atau edit
-                    try {
-                        String sql = "insert into karyawan values('"+txtIdKaryawan.getText()+"','"+txtNamaKaryawan.getText()+"','"+txtNik.getText()+"','"+txtJabatan.getText()+"','"+txtNoHp.getText()+"','"+txtAlamat.getText()+"')";
-                        java.sql.Connection conn = (java.sql.Connection)Database.Koneksi.getConnection();
-                        java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-                        pst.execute();
-                        JOptionPane.showMessageDialog(null, "berhasil disimpan");
-                    } catch (SQLException | HeadlessException e) {
-                        JOptionPane.showMessageDialog(null, e);
-                    }
-        } else {
+        Connection c=buka_koneksi();
+
+        String sqlkode="UPDATE karyawan SET "
+            + "id_karyawan='"+this.txtId.getText()+"',"
+            + "nik='"+this.txtNik.getText()+"',"
+            + "nama_karyawan='"+this.txtNama.getText()+"',"
+            + "jabatan='"+this.txtJabatan.getText()+"',"
+            + "no_telp='"+this.txtNoTelp.getText()+"',"
+            + "alamat='"+this.txtAlamat.getText()+"'";
+           
+                
             try {
-                String sql = "update karyawan SET nama_karyawan='"+txtNamaKaryawan.getText()+"',nik='"+txtNik.getText()+"',jabatan='"+txtJabatan.getText()+"',no_telphone='"+txtNoHp.getText()+"',alamat='"+txtAlamat.getText()+"' where id_karyawan='"+txtIdKaryawan.getText()+"'";
-                java.sql.Connection conn = (java.sql.Connection)Database.Koneksi.getConnection();
-                java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-                pst.execute();
-                JOptionPane.showMessageDialog(null, "berhasil disimpan");
-            } catch (SQLException | HeadlessException e) {
-                JOptionPane.showMessageDialog(null, e);
+               PreparedStatement p2=(PreparedStatement) c.prepareStatement(sqlkode);
+               p2.executeUpdate();
+               p2.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Terjadi kesalahan "+ex.getMessage());
             }
-        }
-        GetData();     
+        //Action Button Refresh
+        JOptionPane.showMessageDialog(null, "Data berhasil diperbarui");
+        ambil_data_tabel();
+        clear_text();     
     }//GEN-LAST:event_btnSimpanActionPerformed
 
-    private void btnBaruActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBaruActionPerformed
+    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
         // TODO add your handling code here:
                 // TODO add your handling code here:
-         databaru=true; // mengosongkan textboxt
-        txtIdKaryawan.setText("");
-        txtNamaKaryawan.setText("");
-        txtNik.setText("");
-        txtJabatan.setText("");
-        txtNoHp.setText("");
-        txtAlamat.setText("");
-    }//GEN-LAST:event_btnBaruActionPerformed
+        Connection c=buka_koneksi();
+        //bikin sql query tambah data
+        String sqlkode="INSERT INTO karyawan (id_karyawan,nik,nama_karyawan,jabatan,no_telp_alamat) "+ "values ('"+this.txtNama.getText()+"',"+ "'"+this.txtJabatan.getText()+"',"+ "'"+this.txtNoTelp.getText()+"',"+ "'"+this.txtAlamat.getText()+"')";
+
+            try {
+               PreparedStatement p2=(PreparedStatement) c.prepareStatement(sqlkode);
+               p2.executeUpdate();
+               p2.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Terjadi kesalahan "+ex.getMessage());
+            }
+        //Action Button Refresh
+        JOptionPane.showMessageDialog(null, "Data berhasil ditambahkan");
+        ambil_data_tabel();
+        clear_text();
+    }//GEN-LAST:event_btnTambahActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
         // TODO add your handling code here:
-        try {
-            String sql = "DELETE FROM karyawan WHERE id_karyawan='"+txtIdKaryawan.getText()+"'";
-            java.sql.Connection conn = (java.sql.Connection)Database.Koneksi.getConnection();
-            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-            pst.execute();
-        JOptionPane.showMessageDialog(null,"Data akan dihapus?");
-        databaru=true;
-        txtIdKaryawan.setText("");
-        txtNamaKaryawan.setText("");
-        txtNik.setText("");
-        txtJabatan.setText("");
-        txtNoHp.setText("");
-        txtAlamat.setText("");
-        
-        }catch (SQLException | HeadlessException e) {
-        
-        }
-        GetData();
+        Connection c=buka_koneksi();
+         String sqlkode="DELETE FROM karyawan "
+                 + "Where id_karyawan='"+this.txtId.getText()+"'";
+
+            int response = JOptionPane.showConfirmDialog(null, "Apakah anda yakin?", "Konfirmasi Hapus",
+            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (response == JOptionPane.NO_OPTION) {
+              // ga melakukan apa2
+            } else if (response == JOptionPane.YES_OPTION) {
+                try {
+                    PreparedStatement p2=(PreparedStatement) c.prepareStatement(sqlkode);
+                    p2.executeUpdate();
+                    p2.close();
+                    //Action Button Refresh
+                    JOptionPane.showMessageDialog(null, "Data telah dihapus");
+                } catch (SQLException ex) {
+                     JOptionPane.showMessageDialog(this, "Terjadi kesalahan "+ex.getMessage());
+                }     
+            } else if (response == JOptionPane.CLOSED_OPTION) {
+                // ga melakukan apa2
+            }
+        ambil_data_tabel();
+        clear_text();
     }//GEN-LAST:event_btnHapusActionPerformed
 
-    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+    private void TableKaryawanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableKaryawanMouseClicked
         // TODO add your handling code here:
-        databaru = false; // menampilkan data ke textboxt
-        try {
-            int row =jTable1.getSelectedRow();
-            String tabel_klik=(jTable1.getModel().getValueAt(row, 0).toString());
-            java.sql.Connection conn =(java.sql.Connection)Database.Koneksi.getConnection();
-            java.sql.Statement stm = conn.createStatement();
-            java.sql.ResultSet sql = stm.executeQuery("select * from karyawan where id_karyawan='"+tabel_klik+"'");
-            if(sql.next()){
-                String id = sql.getString("id_karyawan");
-                txtIdKaryawan.setText(id);
-                String nama = sql.getString("nama_karyawan");
-                txtNamaKaryawan.setText(nama);
-                String nik = sql.getString("nik");
-                txtNik.setText(nik);
-                String jabatan = sql.getString("jabatan");
-                txtJabatan.setText(jabatan);
-                String no_telp = sql.getString("no_telphone");
-                txtNoHp.setText(no_telp);
-                String alamat = sql.getString("alamat");
-                txtAlamat.setText(alamat);              
-            } 
-        } catch (SQLException e) {
-        }
-    }//GEN-LAST:event_jTable1MouseClicked
+        ambil_tabel_klik();
 
-    private void txtNoHpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNoHpActionPerformed
+    }//GEN-LAST:event_TableKaryawanMouseClicked
+
+    private void txtNoTelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNoTelpActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNoHpActionPerformed
+    }//GEN-LAST:event_txtNoTelpActionPerformed
 
     private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakActionPerformed
         // TODO add your handling code here:
@@ -577,7 +603,7 @@ public class Karyawan extends javax.swing.JFrame {
             jasperDesign = JRXmlLoader.load(file);
             param.clear();
             jasperReport = JasperCompileManager.compileReport(jasperDesign);
-            jasperPrint = JasperFillManager.fillReport(jasperReport, param, Database.Koneksi.getConnection());
+            jasperPrint = JasperFillManager.fillReport(jasperReport, param, buka_koneksi());
             JasperViewer.viewReport(jasperPrint, false);        
         }catch (Exception e) {
             e.printStackTrace();
@@ -585,6 +611,70 @@ public class Karyawan extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnCetakActionPerformed
 
+    private void btnSegarkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSegarkanActionPerformed
+        // TODO add your handling code here:
+        ambil_data_tabel();
+        clear_text();
+    }//GEN-LAST:event_btnSegarkanActionPerformed
+
+    public void ambil_data_tabel(){
+        model.getDataVector().removeAllElements();
+            model.fireTableDataChanged();
+            try {            
+                Connection c=buka_koneksi();
+                Statement s= c.createStatement();
+                String sql="Select * from karyawan";
+                ResultSet r=s.executeQuery(sql);
+
+                while (r.next()) {
+                    Object[] o=new Object[6];
+                    o[0]=r.getString("id_karyawan");
+                    o[1]=r.getString("nik");
+                    o[2]=r.getString("nama_karyawan");
+                    o[3]=r.getString("jabatan");
+                    o[4]=r.getString("no_telp");
+                    o[5]=r.getString("alamat");
+
+
+                    model.addRow(o);
+                }
+                r.close();
+                s.close();
+                ambil_tabel_klik();
+            }catch(SQLException e) {
+                System.out.println("Terjadi kesalahan "+e.getMessage());
+            }
+    }
+    
+    private void clear_text(){
+        txtId.setText("");
+        txtNik.setText("");
+        txtNama.setText("");
+        txtJabatan.setText("");
+        txtNoTelp.setText("");
+        txtAlamat.setText("");
+    }
+    
+    private void ambil_tabel_klik(){
+        int i=this.TableKaryawan.getSelectedRow();
+
+            if(i==-1)
+            {
+                return;
+            }
+            String id=(String) model.getValueAt(i, 0);
+            this.txtId.setText(id);
+            String nik=(String) model.getValueAt(i, 1);
+            this.txtNik.setText(nik);
+            String nama=(String) model.getValueAt(i, 2);        
+            this.txtNama.setText(nama);
+            String jabatan=(String) model.getValueAt(i, 3);
+            this.txtJabatan.setText(jabatan);
+            String notelp=(String) model.getValueAt(i, 4);
+            this.txtNoTelp.setText(notelp);
+            String alamat=(String) model.getValueAt(i, 5);
+            this.txtAlamat.setText(alamat);
+    }
     /**
      * @param args the command line arguments
      */
@@ -653,10 +743,12 @@ public class Karyawan extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Kembali;
-    private javax.swing.JButton btnBaru;
+    private javax.swing.JTable TableKaryawan;
     private javax.swing.JButton btnCetak;
     private javax.swing.JButton btnHapus;
+    private javax.swing.JButton btnSegarkan;
     private javax.swing.JButton btnSimpan;
+    private javax.swing.JButton btnTambah;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel15;
@@ -677,12 +769,11 @@ public class Karyawan extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextArea txtAlamat;
-    private javax.swing.JTextField txtIdKaryawan;
+    private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtJabatan;
-    private javax.swing.JTextField txtNamaKaryawan;
+    private javax.swing.JTextField txtNama;
     private javax.swing.JTextField txtNik;
-    private javax.swing.JTextField txtNoHp;
+    private javax.swing.JTextField txtNoTelp;
     // End of variables declaration//GEN-END:variables
 }
