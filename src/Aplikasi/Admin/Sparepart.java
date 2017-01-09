@@ -8,11 +8,20 @@ import Database.Koneksi;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.io.File;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -30,6 +39,9 @@ public class Sparepart extends javax.swing.JFrame {
     
     public boolean databaru;
     
+    private static Connection config; //Koneksi
+    private DefaultTableModel model; //Model Tabel
+    
     Koneksi koneksi = new Koneksi();
     JasperReport jasperReport;
     JasperDesign jasperDesign;
@@ -41,7 +53,18 @@ public class Sparepart extends javax.swing.JFrame {
      */
     public Sparepart() {
         initComponents();
-        GetData();
+        
+        //buat model tabel / header tabel
+        model=new DefaultTableModel();
+        this.TableSparepart.setModel(model); 
+        model.addColumn("ID");
+        model.addColumn("Nama");
+        model.addColumn("Merk");
+        model.addColumn("Tipe");
+        model.addColumn("Harga");
+
+        ambil_data_tabel();
+//        GetData();
     }
     
     private void GetData(){ // menampilkan data dari database
@@ -54,6 +77,22 @@ public class Sparepart extends javax.swing.JFrame {
         catch (SQLException | HeadlessException e) {
         }
      }
+    
+    private static Connection buka_koneksi() {
+        if (config==null) {
+            try {
+                String url="jdbc:mysql://localhost:3306/pabrikmobil"; //nama database belajar
+                String user="root"; //user mysql
+                String password="root"; //password mysql
+               
+                DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+                config=DriverManager.getConnection(url,user,password);
+            }catch (SQLException t) {
+                System.out.println("Error membuat koneksi");
+            }
+        }
+     return config;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -64,6 +103,9 @@ public class Sparepart extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        entityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("pabrikmobil?zeroDateTimeBehavior=convertToNullPU").createEntityManager();
+        sparepart_1Query = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT s FROM Sparepart_1 s");
+        sparepart_1List = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : sparepart_1Query.getResultList();
         jPanel4 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
@@ -77,15 +119,18 @@ public class Sparepart extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
+        txtId = new javax.swing.JTextField();
+        txtNama = new javax.swing.JTextField();
+        txtMerk = new javax.swing.JTextField();
+        txtHarga = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         btnSimpan = new javax.swing.JButton();
-        btnBaru = new javax.swing.JButton();
         btnHapus = new javax.swing.JButton();
+        btnSegarkan = new javax.swing.JButton();
+        btnTambah = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        txtTipe = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
@@ -114,13 +159,10 @@ public class Sparepart extends javax.swing.JFrame {
 
         TableSparepart.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "ID", "Nama", "Merk", "Harga"
+
             }
         ));
         TableSparepart.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -181,27 +223,29 @@ public class Sparepart extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Harga");
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txtId.setEditable(false);
+        txtId.setBackground(new java.awt.Color(240, 240, 240));
+        txtId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txtIdActionPerformed(evt);
             }
         });
 
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        txtNama.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                txtNamaActionPerformed(evt);
             }
         });
 
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+        txtMerk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
+                txtMerkActionPerformed(evt);
             }
         });
 
-        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+        txtHarga.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField4ActionPerformed(evt);
+                txtHargaActionPerformed(evt);
             }
         });
 
@@ -218,13 +262,6 @@ public class Sparepart extends javax.swing.JFrame {
             }
         });
 
-        btnBaru.setText("Baru");
-        btnBaru.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBaruActionPerformed(evt);
-            }
-        });
-
         btnHapus.setText("Hapus");
         btnHapus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -232,18 +269,34 @@ public class Sparepart extends javax.swing.JFrame {
             }
         });
 
+        btnSegarkan.setText("Segarkan");
+        btnSegarkan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSegarkanActionPerformed(evt);
+            }
+        });
+
+        btnTambah.setText("Tambah");
+        btnTambah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnBaru, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(btnHapus, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnSegarkan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -251,10 +304,22 @@ public class Sparepart extends javax.swing.JFrame {
                 .addGap(6, 6, 6)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnHapus)
-                    .addComponent(btnSimpan)
-                    .addComponent(btnBaru))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnTambah)
+                    .addComponent(btnSimpan))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSegarkan)
+                .addContainerGap(40, Short.MAX_VALUE))
         );
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setText("Tipe");
+
+        txtTipe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTipeActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -274,14 +339,16 @@ public class Sparepart extends javax.swing.JFrame {
                             .addComponent(jLabel1)
                             .addComponent(jLabel3)
                             .addComponent(jLabel4)
-                            .addComponent(jLabel2))
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel8))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jTextField2)
-                                .addComponent(jTextField4)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(txtNama)
+                                .addComponent(txtHarga)
+                                .addComponent(txtMerk, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtTipe, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtId, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -297,16 +364,20 @@ public class Sparepart extends javax.swing.JFrame {
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel8)
                         .addGap(11, 11, 11)
                         .addComponent(jLabel4))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtMerk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtTipe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(287, Short.MAX_VALUE))
@@ -427,102 +498,95 @@ public class Sparepart extends javax.swing.JFrame {
         dhimasganteng.show();
     }//GEN-LAST:event_KembaliMouseClicked
 
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+    private void txtHargaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHargaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4ActionPerformed
+    }//GEN-LAST:event_txtHargaActionPerformed
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+    private void txtMerkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMerkActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
+    }//GEN-LAST:event_txtMerkActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void txtNamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNamaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_txtNamaActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txtIdActionPerformed
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         // TODO add your handling code here:
-        if (databaru == true) { // prosess simpan atau edit
-                    try {
-                        String sql = "insert into sparepart values('"+jTextField1.getText()+"','"+jTextField2.getText()+"','"+jTextField3.getText()+"','"+jTextField4.getText()+"')";
-                        java.sql.Connection conn = (java.sql.Connection)Database.Koneksi.getConnection();
-                        java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-                        pst.execute();
-                        JOptionPane.showMessageDialog(null, "berhasil disimpan");
-                    } catch (SQLException | HeadlessException e) {
-                        JOptionPane.showMessageDialog(null, e);
-                    }
-        } else {
+        Connection c=buka_koneksi();
+
+        String sqlkode="UPDATE sparepart SET "
+            + "id='"+this.txtId.getText()+"',"
+            + "nama='"+this.txtNama.getText()+"',"
+            + "merk='"+this.txtMerk.getText()+"',"
+            + "tipe='"+this.txtTipe.getText()+"',"
+            + "harga='"+this.txtHarga.getText()+"'";
+           
+                
             try {
-                String sql = "update sparepart SET nama='"+jTextField2.getText()+"',merk='"+jTextField3.getText()+"',harga='"+jTextField4.getText()+"'";
-                java.sql.Connection conn = (java.sql.Connection)Database.Koneksi.getConnection();
-                java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-                pst.execute();
-                JOptionPane.showMessageDialog(null, "berhasil disimpan");
-            } catch (SQLException | HeadlessException e) {
-                JOptionPane.showMessageDialog(null, e);
+               PreparedStatement p2=(PreparedStatement) c.prepareStatement(sqlkode);
+               p2.executeUpdate();
+               p2.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Terjadi kesalahan "+ex.getMessage());
             }
-        }
-        GetData();   
+        //Action Button Refresh
+        JOptionPane.showMessageDialog(null, "Update sukses");
+        ambil_data_tabel();
+        clear_text();
     }//GEN-LAST:event_btnSimpanActionPerformed
 
-    private void btnBaruActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBaruActionPerformed
+    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
         // TODO add your handling code here:
                 // TODO add your handling code here:
-         databaru=true; // mengosongkan textboxt
-        jTextField1.setText("");
-        jTextField2.setText("");
-        jTextField3.setText("");
-        jTextField4.setText("");
-    }//GEN-LAST:event_btnBaruActionPerformed
+
+        Connection c=buka_koneksi();
+        //bikin sql query tambah data
+        String sqlkode="INSERT INTO sparepart (nama,merk,tipe,harga) "+ "values ('"+this.txtNama.getText()+"',"+ "'"+this.txtMerk.getText()+"',"+ "'"+this.txtTipe.getText()+"',"+ "'"+this.txtHarga.getText()+"')";
+
+            try {
+               PreparedStatement p2=(PreparedStatement) c.prepareStatement(sqlkode);
+               p2.executeUpdate();
+               p2.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Terjadi kesalahan "+ex.getMessage());
+            }
+        //Action Button Refresh
+        JOptionPane.showMessageDialog(null, "Insert sukses");
+        ambil_data_tabel();
+        clear_text();
+    }//GEN-LAST:event_btnTambahActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
         // TODO add your handling code here:
                 // TODO add your handling code here:
-        try {
-            String sql = "DELETE FROM sparepart WHERE id='"+jTextField1.getText()+"'";
-            java.sql.Connection conn = (java.sql.Connection)Database.Koneksi.getConnection();
-            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-            pst.execute();
-        JOptionPane.showMessageDialog(null,"Data akan dihapus?");
-        databaru=true;
-        jTextField1.setText("");
-        jTextField2.setText("");
-        jTextField3.setText("");
-        jTextField4.setText("");
-        
-        }catch (SQLException | HeadlessException e) {
-        
-        }
-        GetData();
-    }//GEN-LAST:event_btnHapusActionPerformed
+        Connection c=buka_koneksi();
+         String sqlkode="DELETE FROM sparepart "
+                 + "Where id='"+this.txtId.getText()+"'";
 
-    private void TableSparepartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableSparepartMouseClicked
-        // TODO add your handling code here:
-        // TODO add your handling code here:
-        databaru = false; // menampilkan data ke textboxt
-        try {
-            int row =TableSparepart.getSelectedRow();
-            String tabel_klik=(TableSparepart.getModel().getValueAt(row, 0).toString());
-            java.sql.Connection conn =(java.sql.Connection)Database.Koneksi.getConnection();
-            java.sql.Statement stm = conn.createStatement();
-            java.sql.ResultSet sql = stm.executeQuery("select * from sparepart where id='"+tabel_klik+"'");
-            if(sql.next()){
-                String id = sql.getString("id");
-                jTextField1.setText(id);
-                String nama = sql.getString("nama");
-                jTextField2.setText(nama);
-                String merek = sql.getString("merek");
-                jTextField3.setText(merek);
-                String harga = sql.getString("harga");
-                jTextField4.setText(harga);
-            } 
-        } catch (SQLException e) {
-        }
-    }//GEN-LAST:event_TableSparepartMouseClicked
+            int response = JOptionPane.showConfirmDialog(null, "Apakah anda yakin?", "Konfirmasi Hapus",
+            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (response == JOptionPane.NO_OPTION) {
+              // ga melakukan apa2
+            } else if (response == JOptionPane.YES_OPTION) {
+                try {
+                    PreparedStatement p2=(PreparedStatement) c.prepareStatement(sqlkode);
+                    p2.executeUpdate();
+                    p2.close();
+                    //Action Button Refresh
+                    JOptionPane.showMessageDialog(null, "Data telah dihapus");
+                } catch (SQLException ex) {
+                     JOptionPane.showMessageDialog(this, "Terjadi kesalahan "+ex.getMessage());
+                }     
+            } else if (response == JOptionPane.CLOSED_OPTION) {
+                // ga melakukan apa2
+            }
+        ambil_data_tabel();
+        clear_text();
+    }//GEN-LAST:event_btnHapusActionPerformed
 
     private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakActionPerformed
         // TODO add your handling code here:
@@ -538,6 +602,77 @@ public class Sparepart extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnCetakActionPerformed
 
+    private void txtTipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTipeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTipeActionPerformed
+
+    private void btnSegarkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSegarkanActionPerformed
+        // TODO add your handling code here:
+        ambil_data_tabel();
+        clear_text();
+    }//GEN-LAST:event_btnSegarkanActionPerformed
+
+    private void TableSparepartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableSparepartMouseClicked
+        // TODO add your handling code here:
+        // TODO add your handling code here:
+        ambil_tabel_klik();
+    }//GEN-LAST:event_TableSparepartMouseClicked
+
+    public void ambil_data_tabel(){
+        model.getDataVector().removeAllElements();
+            model.fireTableDataChanged();
+            try {            
+                Connection c=buka_koneksi();
+                Statement s= c.createStatement();
+                String sql="Select * from sparepart";
+                ResultSet r=s.executeQuery(sql);
+
+                while (r.next()) {
+                    Object[] o=new Object[5];
+                    o[0]=r.getString("id");
+                    o[1]=r.getString("nama");
+                    o[2]=r.getString("merk");
+                    o[3]=r.getString("tipe");
+                    o[4]=r.getString("harga");
+
+
+                    model.addRow(o);
+                }
+                r.close();
+                s.close();
+                ambil_tabel_klik();
+            }catch(SQLException e) {
+                System.out.println("Terjadi kesalahan "+e.getMessage());
+            }
+    }
+    
+    private void clear_text(){
+        txtId.setText("");
+        txtNama.setText("");
+        txtMerk.setText("");
+        txtTipe.setText("");
+        txtHarga.setText("");
+    }
+    
+    private void ambil_tabel_klik(){
+        int i=this.TableSparepart.getSelectedRow();
+
+            if(i==-1)
+            {
+                return;
+            }
+            String id=(String) model.getValueAt(i, 0);
+            this.txtId.setText(id);
+            String nama=(String) model.getValueAt(i, 1);
+            this.txtNama.setText(nama);
+            String merk=(String) model.getValueAt(i, 2);        
+            this.txtMerk.setText(merk);
+            String tipe=(String) model.getValueAt(i, 3);
+            this.txtTipe.setText(tipe);
+            String harga=(String) model.getValueAt(i, 4);
+            this.txtHarga.setText(harga);
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -577,6 +712,54 @@ public class Sparepart extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         
         //</editor-fold>
         //</editor-fold>
@@ -591,10 +774,12 @@ public class Sparepart extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Kembali;
     private javax.swing.JTable TableSparepart;
-    private javax.swing.JButton btnBaru;
     private javax.swing.JButton btnCetak;
     private javax.swing.JButton btnHapus;
+    private javax.swing.JButton btnSegarkan;
     private javax.swing.JButton btnSimpan;
+    private javax.swing.JButton btnTambah;
+    private javax.persistence.EntityManager entityManager;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
@@ -603,6 +788,7 @@ public class Sparepart extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -612,9 +798,12 @@ public class Sparepart extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private java.util.List<Aplikasi.Admin.Sparepart_1> sparepart_1List;
+    private javax.persistence.Query sparepart_1Query;
+    private javax.swing.JTextField txtHarga;
+    private javax.swing.JTextField txtId;
+    private javax.swing.JTextField txtMerk;
+    private javax.swing.JTextField txtNama;
+    private javax.swing.JTextField txtTipe;
     // End of variables declaration//GEN-END:variables
 }
