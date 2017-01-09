@@ -8,8 +8,6 @@ import Database.Koneksi;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.io.File;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -18,8 +16,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
@@ -41,7 +37,7 @@ public class Sparepart extends javax.swing.JFrame {
     
     private static Connection config; //Koneksi
     private DefaultTableModel model; //Model Tabel
-    
+
     Koneksi koneksi = new Koneksi();
     JasperReport jasperReport;
     JasperDesign jasperDesign;
@@ -64,19 +60,7 @@ public class Sparepart extends javax.swing.JFrame {
         model.addColumn("Harga");
 
         ambil_data_tabel();
-//        GetData();
     }
-    
-    private void GetData(){ // menampilkan data dari database
-        try {
-        Connection conn =(Connection)Database.Koneksi.getConnection();
-        java.sql.Statement stm = conn.createStatement();
-        java.sql.ResultSet sql = stm.executeQuery("select * from sparepart");
-        TableSparepart.setModel(DbUtils.resultSetToTableModel(sql));
-        }  
-        catch (SQLException | HeadlessException e) {
-        }
-     }
     
     private static Connection buka_koneksi() {
         if (config==null) {
@@ -93,7 +77,7 @@ public class Sparepart extends javax.swing.JFrame {
         }
      return config;
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -103,17 +87,14 @@ public class Sparepart extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        entityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("pabrikmobil?zeroDateTimeBehavior=convertToNullPU").createEntityManager();
-        sparepart_1Query = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT s FROM Sparepart_1 s");
-        sparepart_1List = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : sparepart_1Query.getResultList();
         jPanel4 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
+        btnCetak = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         TableSparepart = new javax.swing.JTable();
-        btnCetak = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -122,15 +103,15 @@ public class Sparepart extends javax.swing.JFrame {
         txtId = new javax.swing.JTextField();
         txtNama = new javax.swing.JTextField();
         txtMerk = new javax.swing.JTextField();
-        txtHarga = new javax.swing.JTextField();
+        txtTipe = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        btnSimpan = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        txtHarga = new javax.swing.JTextField();
         btnHapus = new javax.swing.JButton();
+        btnSimpan = new javax.swing.JButton();
         btnSegarkan = new javax.swing.JButton();
         btnTambah = new javax.swing.JButton();
-        jLabel8 = new javax.swing.JLabel();
-        txtTipe = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
@@ -157,9 +138,19 @@ public class Sparepart extends javax.swing.JFrame {
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Data Sparepart");
 
+        btnCetak.setText("Cetak");
+        btnCetak.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCetakActionPerformed(evt);
+            }
+        });
+
         TableSparepart.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
 
@@ -172,13 +163,6 @@ public class Sparepart extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(TableSparepart);
 
-        btnCetak.setText("Cetak");
-        btnCetak.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCetakActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
@@ -190,19 +174,19 @@ public class Sparepart extends javax.swing.JFrame {
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnCetak, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnCetak, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9)
                     .addComponent(btnCetak))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(54, Short.MAX_VALUE))
+                .addContainerGap(110, Short.MAX_VALUE))
         );
 
         jPanel1.setBackground(new java.awt.Color(34, 66, 138));
@@ -221,7 +205,7 @@ public class Sparepart extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Harga");
+        jLabel4.setText("Tipe");
 
         txtId.setEditable(false);
         txtId.setBackground(new java.awt.Color(240, 240, 240));
@@ -243,9 +227,9 @@ public class Sparepart extends javax.swing.JFrame {
             }
         });
 
-        txtHarga.addActionListener(new java.awt.event.ActionListener() {
+        txtTipe.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtHargaActionPerformed(evt);
+                txtTipeActionPerformed(evt);
             }
         });
 
@@ -255,10 +239,24 @@ public class Sparepart extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(34, 66, 138));
 
-        btnSimpan.setText("Simpan");
-        btnSimpan.addActionListener(new java.awt.event.ActionListener() {
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 305, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 40, Short.MAX_VALUE)
+        );
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setText("Harga");
+
+        txtHarga.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSimpanActionPerformed(evt);
+                txtHargaActionPerformed(evt);
             }
         });
 
@@ -266,6 +264,13 @@ public class Sparepart extends javax.swing.JFrame {
         btnHapus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHapusActionPerformed(evt);
+            }
+        });
+
+        btnSimpan.setText("Simpan");
+        btnSimpan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSimpanActionPerformed(evt);
             }
         });
 
@@ -283,44 +288,6 @@ public class Sparepart extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnHapus, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnSegarkan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnHapus)
-                    .addComponent(btnTambah)
-                    .addComponent(btnSimpan))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnSegarkan)
-                .addContainerGap(40, Short.MAX_VALUE))
-        );
-
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setText("Tipe");
-
-        txtTipe.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtTipeActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -328,9 +295,6 @@ public class Sparepart extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 57, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addGap(0, 0, Short.MAX_VALUE))
@@ -341,14 +305,25 @@ public class Sparepart extends javax.swing.JFrame {
                             .addComponent(jLabel4)
                             .addComponent(jLabel2)
                             .addComponent(jLabel8))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtNama)
+                            .addComponent(txtTipe)
+                            .addComponent(txtMerk, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+                            .addComponent(txtHarga)
+                            .addComponent(txtId, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtNama)
-                                .addComponent(txtHarga)
-                                .addComponent(txtMerk, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtTipe, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtId, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(btnTambah, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(btnSegarkan, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -364,10 +339,10 @@ public class Sparepart extends javax.swing.JFrame {
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel8)
                         .addGap(11, 11, 11)
-                        .addComponent(jLabel4))
+                        .addComponent(jLabel4)
+                        .addGap(11, 11, 11)
+                        .addComponent(jLabel8))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -379,19 +354,26 @@ public class Sparepart extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnHapus)
+                    .addComponent(btnSimpan)
+                    .addComponent(btnTambah))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSegarkan)
+                .addGap(84, 84, 84)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(287, Short.MAX_VALUE))
+                .addContainerGap(301, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 423, Short.MAX_VALUE)
+            .addGap(0, 470, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 7, Short.MAX_VALUE)
+            .addGap(0, 6, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -399,17 +381,17 @@ public class Sparepart extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel15)
-                .addGap(31, 31, 31))
-            .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel15)
+                .addGap(31, 31, 31))
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -421,7 +403,7 @@ public class Sparepart extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -451,7 +433,7 @@ public class Sparepart extends javax.swing.JFrame {
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(11, 11, 11)
                 .addComponent(jLabel7)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -498,9 +480,9 @@ public class Sparepart extends javax.swing.JFrame {
         dhimasganteng.show();
     }//GEN-LAST:event_KembaliMouseClicked
 
-    private void txtHargaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHargaActionPerformed
+    private void txtTipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTipeActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtHargaActionPerformed
+    }//GEN-LAST:event_txtTipeActionPerformed
 
     private void txtMerkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMerkActionPerformed
         // TODO add your handling code here:
@@ -534,35 +516,13 @@ public class Sparepart extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Terjadi kesalahan "+ex.getMessage());
             }
         //Action Button Refresh
-        JOptionPane.showMessageDialog(null, "Update sukses");
+        JOptionPane.showMessageDialog(null, "Data berhasil diperbarui");
         ambil_data_tabel();
-        clear_text();
+        clear_text();  
     }//GEN-LAST:event_btnSimpanActionPerformed
-
-    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
-        // TODO add your handling code here:
-                // TODO add your handling code here:
-
-        Connection c=buka_koneksi();
-        //bikin sql query tambah data
-        String sqlkode="INSERT INTO sparepart (nama,merk,tipe,harga) "+ "values ('"+this.txtNama.getText()+"',"+ "'"+this.txtMerk.getText()+"',"+ "'"+this.txtTipe.getText()+"',"+ "'"+this.txtHarga.getText()+"')";
-
-            try {
-               PreparedStatement p2=(PreparedStatement) c.prepareStatement(sqlkode);
-               p2.executeUpdate();
-               p2.close();
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, "Terjadi kesalahan "+ex.getMessage());
-            }
-        //Action Button Refresh
-        JOptionPane.showMessageDialog(null, "Insert sukses");
-        ambil_data_tabel();
-        clear_text();
-    }//GEN-LAST:event_btnTambahActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
         // TODO add your handling code here:
-                // TODO add your handling code here:
         Connection c=buka_koneksi();
          String sqlkode="DELETE FROM sparepart "
                  + "Where id='"+this.txtId.getText()+"'";
@@ -588,6 +548,15 @@ public class Sparepart extends javax.swing.JFrame {
         clear_text();
     }//GEN-LAST:event_btnHapusActionPerformed
 
+    private void TableSparepartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableSparepartMouseClicked
+        // TODO add your handling code here:
+        ambil_tabel_klik();
+    }//GEN-LAST:event_TableSparepartMouseClicked
+
+    private void txtHargaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHargaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtHargaActionPerformed
+
     private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakActionPerformed
         // TODO add your handling code here:
         try {
@@ -600,11 +569,8 @@ public class Sparepart extends javax.swing.JFrame {
         }catch (Exception e) {
             e.printStackTrace();
         }
+        
     }//GEN-LAST:event_btnCetakActionPerformed
-
-    private void txtTipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTipeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtTipeActionPerformed
 
     private void btnSegarkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSegarkanActionPerformed
         // TODO add your handling code here:
@@ -612,17 +578,30 @@ public class Sparepart extends javax.swing.JFrame {
         clear_text();
     }//GEN-LAST:event_btnSegarkanActionPerformed
 
-    private void TableSparepartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableSparepartMouseClicked
+    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
         // TODO add your handling code here:
-        // TODO add your handling code here:
-        ambil_tabel_klik();
-    }//GEN-LAST:event_TableSparepartMouseClicked
+        Connection c=buka_koneksi();
+        //bikin sql query tambah data
+        String sqlkode="INSERT INTO sparepart (nama,merk,tipe,harga) "+ "values ('"+this.txtNama.getText()+"',"+ "'"+this.txtMerk.getText()+"',"+ "'"+this.txtTipe.getText()+"',"+ "'"+this.txtHarga.getText()+"')";
+
+            try {
+               PreparedStatement p2=(PreparedStatement) c.prepareStatement(sqlkode);
+               p2.executeUpdate();
+               p2.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Terjadi kesalahan "+ex.getMessage());
+            }
+        //Action Button Refresh
+        JOptionPane.showMessageDialog(null, "Data berhasil ditambahkan");
+        ambil_data_tabel();
+        clear_text();
+    }//GEN-LAST:event_btnTambahActionPerformed
 
     public void ambil_data_tabel(){
         model.getDataVector().removeAllElements();
             model.fireTableDataChanged();
             try {            
-                Connection c=buka_koneksi();
+                Connection c=Database.Koneksi.getConnection();
                 Statement s= c.createStatement();
                 String sql="Select * from sparepart";
                 ResultSet r=s.executeQuery(sql);
@@ -672,7 +651,6 @@ public class Sparepart extends javax.swing.JFrame {
             String harga=(String) model.getValueAt(i, 4);
             this.txtHarga.setText(harga);
     }
-    
     /**
      * @param args the command line arguments
      */
@@ -779,7 +757,6 @@ public class Sparepart extends javax.swing.JFrame {
     private javax.swing.JButton btnSegarkan;
     private javax.swing.JButton btnSimpan;
     private javax.swing.JButton btnTambah;
-    private javax.persistence.EntityManager entityManager;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
@@ -798,8 +775,6 @@ public class Sparepart extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private java.util.List<Aplikasi.Admin.Sparepart_1> sparepart_1List;
-    private javax.persistence.Query sparepart_1Query;
     private javax.swing.JTextField txtHarga;
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtMerk;
