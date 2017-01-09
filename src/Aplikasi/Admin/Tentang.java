@@ -787,7 +787,7 @@ public class Tentang extends javax.swing.JFrame {
     private void LogoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LogoutMouseClicked
         // TODO add your handling code here:
         this.dispose();
-        Aplikasi.Admin.FormLogin dhimasganteng = new Aplikasi.Admin.FormLogin();
+        Aplikasi.Admin.FormMasuk dhimasganteng = new Aplikasi.Admin.FormMasuk();
         dhimasganteng.show();
     }//GEN-LAST:event_LogoutMouseClicked
 
