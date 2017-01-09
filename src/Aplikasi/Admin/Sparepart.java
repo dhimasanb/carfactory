@@ -560,7 +560,7 @@ public class Sparepart extends javax.swing.JFrame {
     private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakActionPerformed
         // TODO add your handling code here:
         try {
-            File file = new File("src/Laporan/Sparepart.jrxml");
+            File file = new File("src/Laporan/Admin/Sparepart.jrxml");
             jasperDesign = JRXmlLoader.load(file);
             param.clear();
             jasperReport = JasperCompileManager.compileReport(jasperDesign);
