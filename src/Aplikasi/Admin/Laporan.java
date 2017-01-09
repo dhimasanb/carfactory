@@ -275,7 +275,7 @@ public class Laporan extends javax.swing.JFrame {
     private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakActionPerformed
         // TODO add your handling code here:
         try {
-            File file = new File("src/Laporan/report1.jrxml");
+            File file = new File("src/Laporan/Admin/Laporan.jrxml");
             jasperDesign = JRXmlLoader.load(file);
             param.clear();
             jasperReport = JasperCompileManager.compileReport(jasperDesign);
