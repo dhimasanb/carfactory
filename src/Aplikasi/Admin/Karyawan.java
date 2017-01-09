@@ -81,20 +81,20 @@ public class Karyawan extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
+        txtIdKaryawan = new javax.swing.JTextField();
+        txtNamaKaryawan = new javax.swing.JTextField();
+        txtNik = new javax.swing.JTextField();
+        txtJabatan = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        btnBaru = new javax.swing.JButton();
         btnHapus = new javax.swing.JButton();
+        btnBaru = new javax.swing.JButton();
         btnSimpan = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        txtNoHp = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtAlamat = new javax.swing.JTextArea();
         jPanel3 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
@@ -190,27 +190,27 @@ public class Karyawan extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Jabatan");
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txtIdKaryawan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txtIdKaryawanActionPerformed(evt);
             }
         });
 
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        txtNamaKaryawan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                txtNamaKaryawanActionPerformed(evt);
             }
         });
 
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+        txtNik.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
+                txtNikActionPerformed(evt);
             }
         });
 
-        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+        txtJabatan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField4ActionPerformed(evt);
+                txtJabatanActionPerformed(evt);
             }
         });
 
@@ -220,28 +220,17 @@ public class Karyawan extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(34, 66, 138));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 297, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 40, Short.MAX_VALUE)
-        );
+        btnHapus.setText("Hapus");
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
 
         btnBaru.setText("Baru");
         btnBaru.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBaruActionPerformed(evt);
-            }
-        });
-
-        btnHapus.setText("Hapus");
-        btnHapus.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHapusActionPerformed(evt);
             }
         });
 
@@ -252,13 +241,35 @@ public class Karyawan extends javax.swing.JFrame {
             }
         });
 
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(0, 20, Short.MAX_VALUE)
+                .addComponent(btnBaru, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(0, 17, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnHapus)
+                    .addComponent(btnSimpan)
+                    .addComponent(btnBaru)))
+        );
+
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("No. HP");
 
-        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+        txtNoHp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField5ActionPerformed(evt);
+                txtNoHpActionPerformed(evt);
             }
         });
 
@@ -266,9 +277,9 @@ public class Karyawan extends javax.swing.JFrame {
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setText("Alamat");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        txtAlamat.setColumns(20);
+        txtAlamat.setRows(5);
+        jScrollPane2.setViewportView(txtAlamat);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -290,22 +301,15 @@ public class Karyawan extends javax.swing.JFrame {
                             .addComponent(jLabel10))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField2)
-                            .addComponent(jTextField4)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
-                            .addComponent(jTextField5)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+                            .addComponent(txtNamaKaryawan)
+                            .addComponent(txtJabatan)
+                            .addComponent(txtNik, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+                            .addComponent(txtNoHp)
+                            .addComponent(txtIdKaryawan, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
                             .addComponent(jScrollPane2)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnBaru, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -326,27 +330,22 @@ public class Karyawan extends javax.swing.JFrame {
                         .addGap(11, 11, 11)
                         .addComponent(jLabel8))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtIdKaryawan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtNamaKaryawan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtNik, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtJabatan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtNoHp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(11, 11, 11)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel10)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnHapus)
-                    .addComponent(btnSimpan)
-                    .addComponent(btnBaru))
-                .addContainerGap(272, Short.MAX_VALUE))
+                .addContainerGap(301, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -464,27 +463,27 @@ public class Karyawan extends javax.swing.JFrame {
         dhimasganteng.show();
     }//GEN-LAST:event_KembaliMouseClicked
 
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+    private void txtJabatanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtJabatanActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4ActionPerformed
+    }//GEN-LAST:event_txtJabatanActionPerformed
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+    private void txtNikActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNikActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
+    }//GEN-LAST:event_txtNikActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void txtNamaKaryawanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNamaKaryawanActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_txtNamaKaryawanActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txtIdKaryawanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdKaryawanActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txtIdKaryawanActionPerformed
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         // TODO add your handling code here:
         if (databaru == true) { // prosess simpan atau edit
                     try {
-                        String sql = "insert into karyawan values('"+jTextField1.getText()+"','"+jTextField2.getText()+"','"+jTextField3.getText()+"','"+jTextField4.getText()+"','"+jTextField5.getText()+"','"+jTextArea1.getText()+"')";
+                        String sql = "insert into karyawan values('"+txtIdKaryawan.getText()+"','"+txtNamaKaryawan.getText()+"','"+txtNik.getText()+"','"+txtJabatan.getText()+"','"+txtNoHp.getText()+"','"+txtAlamat.getText()+"')";
                         java.sql.Connection conn = (java.sql.Connection)Database.Koneksi.getConnection();
                         java.sql.PreparedStatement pst = conn.prepareStatement(sql);
                         pst.execute();
@@ -494,7 +493,7 @@ public class Karyawan extends javax.swing.JFrame {
                     }
         } else {
             try {
-                String sql = "update karyawan SET nama_karyawan='"+jTextField2.getText()+"',nik='"+jTextField3.getText()+"',jabatan='"+jTextField4.getText()+"',no_telphone='"+jTextField5.getText()+"',alamat='"+jTextArea1.getText()+"' where id_karyawan='"+jTextField1.getText()+"'";
+                String sql = "update karyawan SET nama_karyawan='"+txtNamaKaryawan.getText()+"',nik='"+txtNik.getText()+"',jabatan='"+txtJabatan.getText()+"',no_telphone='"+txtNoHp.getText()+"',alamat='"+txtAlamat.getText()+"' where id_karyawan='"+txtIdKaryawan.getText()+"'";
                 java.sql.Connection conn = (java.sql.Connection)Database.Koneksi.getConnection();
                 java.sql.PreparedStatement pst = conn.prepareStatement(sql);
                 pst.execute();
@@ -510,29 +509,29 @@ public class Karyawan extends javax.swing.JFrame {
         // TODO add your handling code here:
                 // TODO add your handling code here:
          databaru=true; // mengosongkan textboxt
-        jTextField1.setText("");
-        jTextField2.setText("");
-        jTextField3.setText("");
-        jTextField4.setText("");
-        jTextField5.setText("");
-        jTextArea1.setText("");
+        txtIdKaryawan.setText("");
+        txtNamaKaryawan.setText("");
+        txtNik.setText("");
+        txtJabatan.setText("");
+        txtNoHp.setText("");
+        txtAlamat.setText("");
     }//GEN-LAST:event_btnBaruActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
         // TODO add your handling code here:
         try {
-            String sql = "DELETE FROM karyawan WHERE id_karyawan='"+jTextField1.getText()+"'";
+            String sql = "DELETE FROM karyawan WHERE id_karyawan='"+txtIdKaryawan.getText()+"'";
             java.sql.Connection conn = (java.sql.Connection)Database.Koneksi.getConnection();
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
             pst.execute();
         JOptionPane.showMessageDialog(null,"Data akan dihapus?");
         databaru=true;
-        jTextField1.setText("");
-        jTextField2.setText("");
-        jTextField3.setText("");
-        jTextField4.setText("");
-        jTextField5.setText("");
-        jTextArea1.setText("");
+        txtIdKaryawan.setText("");
+        txtNamaKaryawan.setText("");
+        txtNik.setText("");
+        txtJabatan.setText("");
+        txtNoHp.setText("");
+        txtAlamat.setText("");
         
         }catch (SQLException | HeadlessException e) {
         
@@ -551,25 +550,25 @@ public class Karyawan extends javax.swing.JFrame {
             java.sql.ResultSet sql = stm.executeQuery("select * from karyawan where id_karyawan='"+tabel_klik+"'");
             if(sql.next()){
                 String id = sql.getString("id_karyawan");
-                jTextField1.setText(id);
+                txtIdKaryawan.setText(id);
                 String nama = sql.getString("nama_karyawan");
-                jTextField2.setText(nama);
+                txtNamaKaryawan.setText(nama);
                 String nik = sql.getString("nik");
-                jTextField3.setText(nik);
+                txtNik.setText(nik);
                 String jabatan = sql.getString("jabatan");
-                jTextField4.setText(jabatan);
+                txtJabatan.setText(jabatan);
                 String no_telp = sql.getString("no_telphone");
-                jTextField5.setText(no_telp);
+                txtNoHp.setText(no_telp);
                 String alamat = sql.getString("alamat");
-                jTextArea1.setText(alamat);              
+                txtAlamat.setText(alamat);              
             } 
         } catch (SQLException e) {
         }
     }//GEN-LAST:event_jTable1MouseClicked
 
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+    private void txtNoHpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNoHpActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField5ActionPerformed
+    }//GEN-LAST:event_txtNoHpActionPerformed
 
     private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakActionPerformed
         // TODO add your handling code here:
@@ -679,11 +678,11 @@ public class Karyawan extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
+    private javax.swing.JTextArea txtAlamat;
+    private javax.swing.JTextField txtIdKaryawan;
+    private javax.swing.JTextField txtJabatan;
+    private javax.swing.JTextField txtNamaKaryawan;
+    private javax.swing.JTextField txtNik;
+    private javax.swing.JTextField txtNoHp;
     // End of variables declaration//GEN-END:variables
 }
