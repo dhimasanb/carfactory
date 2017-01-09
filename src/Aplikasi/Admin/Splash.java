@@ -1,6 +1,6 @@
 package Aplikasi.Admin;
 
-import Aplikasi.Admin.FormLogin;
+import Aplikasi.Admin.FormMasuk;
 import java.awt.BorderLayout;
 import java.awt.Image;
 import java.util.logging.Level;
@@ -49,7 +49,7 @@ public class Splash extends JWindow {
                     window.setVisible(true);
 
                     Thread.sleep(5000);
-                    new FormLogin().setVisible(true);
+                    new FormMasuk().setVisible(true);
 
                     window.setVisible(false);
                 } catch (InterruptedException ex) {
